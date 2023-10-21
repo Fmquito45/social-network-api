@@ -46,4 +46,4 @@ userSchema.virtual('friendCount').get(function(){
 
 const User = mongoose('User',userSchema)
 // export the User 
-module.exports = User
+module.exports = User;
