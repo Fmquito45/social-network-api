@@ -1,5 +1,4 @@
-const { Thought, User, Reaction } = require('../models/index.js');
-const mongoose = require('mongoose');
+const { Thought, User} = require('../models/index.js');
 
 const ThoughtController = {
   async getThoughts(req, res) {
