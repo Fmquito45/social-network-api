@@ -85,5 +85,5 @@ const ThoughtController = {
   },
 
 };
-// Export ThoughtController
+// export ThoughtController
 module.exports = ThoughtController;
