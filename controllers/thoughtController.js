@@ -11,7 +11,7 @@ const ThoughtController = {
     }
   },
 
-  async getOneThought(req, res) {
+  async getThoughtById(req, res) {
     try {
       const thought = await Thought.findOne({_id:req.params.thoughtId});
       if (!thought) {
