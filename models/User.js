@@ -1,5 +1,5 @@
 // Import dependencies from the mongoose
-const mongoose = require('mongoose'); 
+const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema(
   {
@@ -21,13 +21,13 @@ const userSchema = new Schema(
     },
     friends:[
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
         }
     ],
     thoughts:[
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Thought',
         }
     ],
@@ -44,6 +44,6 @@ userSchema.virtual('friendCount').get(function(){
     return this.friends.length;
 });
 
-const User = mongoose('User',userSchema)
+const User = model('User',userSchema)
 // export the User 
 module.exports = User;

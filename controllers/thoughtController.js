@@ -1,4 +1,4 @@
-const { Reaction, Thought, User } = require('../models');
+const { Thought, User, Reaction } = require('../models/index.js');
 const mongoose = require('mongoose');
 
 const ThoughtController = {
@@ -27,6 +27,11 @@ const ThoughtController = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $push: { thoughts: dbThoughtData._id } },
+        { new: true }
+      );
       res.status(200).json(thought);
     } catch (err) {
       res.status(500).json(err);
