@@ -1,6 +1,7 @@
 // Import packages and files
-const express =  require('express');
+const express = require('express');
 const db = require('./config/connection.js');
+const routes = require('./routes');
 
 
 // Set up environment variables
@@ -9,7 +10,9 @@ const app = express();
 // Use middleware 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(express.static('public'));
+// route
+app.use(routes); 
 
 db.once('open', () => {
     app.listen(PORT, () => {
