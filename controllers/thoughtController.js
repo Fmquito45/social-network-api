@@ -1,6 +1,8 @@
 const { Thought, User} = require('../models/index.js');
 
 const ThoughtController = {
+  // following methods
+  // gets all thougths
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find({});
@@ -9,7 +11,7 @@ const ThoughtController = {
       res.status(500).json(err);
     }
   },
-
+  // gets single thought by id
   async getThoughtById(req, res) {
     try {
       const thought = await Thought.findOne({_id:req.params.thoughtId});
@@ -22,30 +24,47 @@ const ThoughtController = {
       res.status(500).json(err);
     }
   },
-
+  // creates thought and sets to user
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: req.body.userId },
-        { $push: { thoughts: dbThoughtData._id } },
-        { new: true }
-      );
-      res.status(200).json(thought);
+      console.log(thought);
+      const usernamee = thought.username;
+      console.log(thought.username);
+      if (thought.username) {
+        const user = await User.findOne({username: usernamee});
+        console.log(user);
+        if (user) {
+          user.thoughts.push(thought._id);
+          await user.save();
+        }
+      }
+      res.json(thought);
     } catch (err) {
-      res.status(500).json(err);
+      console.log(err);
+      return res.status(500).json(err);
     }
   },
-  
+  // deletes thought and removes from user
   async deleteThought(req,res) {
     try {
-        const thought = await Thought.findByIdAndDelete({_id:req.params.thoughtId});
-        res.status(200).json(thought);
+      const thought = await Thought.findByIdAndDelete({_id:req.params.thoughtId});
+      res.status(200).json(thought);
+      const usernamee = thought.username;
+      console.log(thought.username);
+      if (thought.username) {
+        const user = await User.findOne({username: usernamee});
+        console.log(user);
+        if (user) {
+          user.thoughts.pop(thought._id);
+          await user.save();
+        }
+      }
     } catch (err) {
         res.status(500).json(err);
     }
   },
-
+  // updates thought with id
   async updateThought(req, res) {
     try {
       const thought = await Thought.findByIdAndUpdate(req.params.thoughtId, req.body, {
@@ -60,7 +79,7 @@ const ThoughtController = {
       res.status(500).json(err);
     }
   },
-
+  // creates reaction through thought id
   async createReaction(req, res) {
       try {
         const thought = await Thought.findOneAndUpdate(
@@ -73,7 +92,7 @@ const ThoughtController = {
         res.status(500).json(err);
     }
   },
-
+  // deletes reaction on thought with id
   async deleteReaction(req, res) {
       try {
         const thought = await Thought.findOneAndUpdate(
